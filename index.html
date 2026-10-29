@@ -1,379 +1,171 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#f7f0ed">
-  <meta name="description" content="有些话，想慢慢说给你听。">
-  <title>有些话，想慢慢说给你听</title>
-  <style>
-    :root{--paper:#f8f3ef;--paper2:#fffaf7;--ink:#493e42;--muted:#927e82;--accent:#c88d9b;--accent2:#e2b5be;--line:#e9d9d9;--glow:rgba(209,150,165,.24);--serif:"Songti SC","STSong","Noto Serif SC","SimSun",serif;--sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;--scale:1}
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
-    button,input,textarea,select{font:inherit}
-    button{cursor:pointer}
-    button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
-    button:disabled{cursor:not-allowed;opacity:.5}
-    ::selection{background:var(--accent2);color:#473139}
-    .page-frame{position:relative;overflow:hidden;isolation:isolate}
-    .page-frame:before{content:"";position:fixed;z-index:-3;inset:0;pointer-events:none;background:radial-gradient(ellipse at 18% 11%,var(--glow),transparent 44%),radial-gradient(ellipse at 87% 75%,rgba(227,197,168,.15),transparent 45%)}
-    .grain{position:fixed;inset:0;pointer-events:none;z-index:12;opacity:.22;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.58' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.15'/%3E%3C/svg%3E")}
-    .progress{position:fixed;z-index:30;top:0;left:0;right:0;height:3px;background:transparent;pointer-events:none}
-    .progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width .13s linear}
-    .ambient{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}
-    .ambient .spark{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--accent2);opacity:.19;animation:drift linear infinite}
-    .ambient .spark:nth-child(1){left:8%;top:18%;animation-duration:21s;animation-delay:-4s}
-    .ambient .spark:nth-child(2){left:88%;top:25%;width:3px;height:3px;animation-duration:17s;animation-delay:-9s}
-    .ambient .spark:nth-child(3){left:72%;top:80%;animation-duration:23s;animation-delay:-14s}
-    .ambient .spark:nth-child(4){left:25%;top:70%;width:3px;height:3px;animation-duration:25s;animation-delay:-2s}
-    .ambient .spark:nth-child(5){left:49%;top:8%;animation-duration:19s;animation-delay:-11s}
-    .ambient .spark:nth-child(6){left:95%;top:65%;animation-duration:28s;animation-delay:-7s}
-    @keyframes drift{0%{transform:translateY(14px) scale(.7);opacity:.08}50%{transform:translateY(-38px) scale(1.15);opacity:.34}100%{transform:translateY(-90px) scale(.7);opacity:.06}}
-    .cover{min-height:100vh;min-height:100svh;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;padding:78px 24px 60px}
-    .cover:before,.cover:after{content:"";position:absolute;border:1px solid var(--line);border-radius:50%;z-index:0;pointer-events:none}
-    .cover:before{width:min(96vw,540px);height:min(96vw,540px);top:-260px;right:-210px;opacity:.75}
-    .cover:after{width:330px;height:330px;left:-215px;bottom:-188px;opacity:.65}
-    .cover-content{width:min(100%,470px);position:relative;z-index:1;animation:reveal 1.05s ease both}
-    .eyebrow{font-size:11px;letter-spacing:.33em;text-transform:uppercase;color:var(--muted);font-weight:600}
-    .ornament{display:flex;align-items:center;justify-content:center;gap:12px;color:var(--accent);margin:24px auto 22px}
-    .ornament:before,.ornament:after{content:"";width:34px;height:1px;background:var(--line)}
-    .tiny-flower{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.35;stroke-linecap:round;stroke-linejoin:round}
-    .recipient{margin-top:22px;color:var(--muted);font-size:13px;letter-spacing:.18em}
-    .cover h1{font-size:clamp(42px,11vw,65px);font-family:var(--serif);font-weight:500;letter-spacing:.10em;line-height:1.38;margin:15px 0 5px}
-    .cover h1 span{display:block}
-    .cover-tag{font-size:15px;letter-spacing:.08em;color:var(--muted);line-height:2;margin:12px auto 12px;max-width:330px}
-    .envelope-wrap{width:266px;height:193px;margin:30px auto 10px;display:flex;align-items:end;justify-content:center;perspective:900px}
-    .envelope-btn{border:0;background:transparent;width:260px;height:166px;position:relative;filter:drop-shadow(0 16px 22px rgba(105,76,81,.12));transition:transform .35s ease;outline-offset:12px}
-    .envelope-btn:hover{transform:translateY(-4px)}
-    .envelope-back{position:absolute;inset:0;background:#f0d6d7;border-radius:6px}
-    .envelope-letter{position:absolute;z-index:1;width:210px;height:124px;left:25px;top:22px;background:#fffefa;border:1px solid #ecdada;border-radius:3px;display:grid;place-content:center;gap:10px;color:var(--accent);box-shadow:0 2px 5px rgba(0,0,0,.035);transition:transform .7s cubic-bezier(.17,.78,.22,1)}
-    .envelope-letter small{letter-spacing:.26em;font-size:9px;color:var(--muted)}
-    .envelope-front{position:absolute;z-index:3;inset:0;background:#edd0d3;clip-path:polygon(0 0,50% 54%,100% 0,100% 100%,0 100%);border-radius:0 0 6px 6px}
-    .envelope-side{position:absolute;z-index:4;inset:0;background:#f6dfe0;clip-path:polygon(0 100%,50% 49%,100% 100%);border-radius:0 0 6px 6px}
-    .envelope-flap{position:absolute;z-index:5;inset:0;clip-path:polygon(0 0,50% 58%,100% 0);background:#e4bfc5;transform-origin:top;transition:transform .65s cubic-bezier(.4,0,.2,1),z-index .1s .28s}
-    .envelope-seal{position:absolute;z-index:6;top:80px;left:calc(50% - 18px);width:36px;height:36px;border-radius:50%;background:#c98f9d;color:#fff6f2;display:grid;place-items:center;box-shadow:0 2px 6px rgba(114,54,73,.15);transition:opacity .2s,transform .4s}
-    .envelope-btn.opened .envelope-flap{transform:rotateX(180deg);z-index:0}
-    .envelope-btn.opened .envelope-letter{transform:translateY(-75px)}
-    .envelope-btn.opened .envelope-seal{opacity:0;transform:scale(.55)}
-    .open-hint{margin-top:18px;color:var(--muted);font-size:12px;letter-spacing:.14em}
-    .scroll-mark{margin-top:30px;display:flex;justify-content:center;gap:9px;align-items:center;font-size:11px;color:var(--muted);opacity:.75}
-    .scroll-mark span{display:block;width:21px;height:1px;background:var(--line)}
-    .chapter{position:relative;padding:90px 24px 105px;min-height:86svh;display:flex;align-items:center;justify-content:center;scroll-margin-top:0;z-index:1}
-    .chapter:nth-child(even){background:linear-gradient(155deg,rgba(255,255,255,.44),rgba(255,255,255,.09))}
-    .chapter:before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:min(85%,580px);height:1px;background:var(--line)}
-    .chapter-inner{position:relative;max-width:620px;width:100%;margin:auto}
-    .chapter-num{position:absolute;right:0;top:-35px;color:var(--accent);font-size:92px;font-family:Georgia,serif;line-height:1;opacity:.085;pointer-events:none}
-    .chapter-kicker{font-size:12px;letter-spacing:.26em;color:var(--accent);font-weight:600;margin:0 0 20px}
-    .chapter h2{font-family:var(--serif);font-size:clamp(28px,7vw,40px);font-weight:500;letter-spacing:.05em;line-height:1.65;margin:0 0 25px}
-    .hairline{width:40px;height:1px;background:var(--accent2);margin-bottom:30px}
-    .chapter-text{font-size:calc(15.5px * var(--scale));line-height:2.35;letter-spacing:.035em;color:var(--ink)}
-    .chapter-text p{margin:0 0 1.5em}
-    .chapter-quote{position:relative;margin:30px 0 0;padding:18px 0 18px 22px;border-left:2px solid var(--accent2);font-family:var(--serif);font-size:calc(16px * var(--scale));line-height:2.1;color:var(--muted)}
-    .chapter-action{margin-top:38px;display:inline-flex;align-items:center;gap:13px;border:0;background:transparent;color:var(--muted);font-size:12px;letter-spacing:.15em;padding:10px 0}
-    .chapter-action:after{content:"";display:block;width:26px;height:1px;background:var(--accent);transition:width .3s}
-    .chapter-action:hover:after{width:45px}
-    .cards-title{margin:39px 0 18px;font-size:12px;color:var(--muted);letter-spacing:.12em}
-    .flip-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
-    .flip-card{height:168px;min-width:0;position:relative;border:0;background:transparent;padding:0;perspective:1000px;text-align:center}
-    .flip-inner{position:absolute;inset:0;transition:transform .7s cubic-bezier(.2,.72,.25,1);transform-style:preserve-3d}
-    .flip-card.flipped .flip-inner{transform:rotateY(180deg)}
-    .flip-face{position:absolute;inset:0;border:1px solid var(--line);background:var(--paper2);backface-visibility:hidden;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:13px;border-radius:10px;box-shadow:0 8px 24px rgba(129,89,96,.045);gap:12px}
-    .flip-face.front{color:var(--ink)}
-    .flip-face.front .heart{color:var(--accent);font-size:19px}
-    .flip-face.front span:nth-child(2){font-family:var(--serif);font-size:15px}
-    .flip-face.front small{color:var(--muted);font-size:10px}
-    .flip-face.back{transform:rotateY(180deg);background:#fffaf6;font-size:12px;line-height:1.85;color:var(--ink)}
-    .ending{min-height:58svh;display:flex;align-items:center;justify-content:center;text-align:center;padding:55px 25px 100px;position:relative}
-    .ending-inner{max-width:520px;margin:auto}
-    .ending-icon{color:var(--accent);margin:auto;display:block;width:60px;height:60px}
-    .ending-line{font-family:var(--serif);font-size:clamp(20px,5.5vw,28px);line-height:2;letter-spacing:.06em;margin:22px auto 30px;max-width:440px}
-    .ending-note{font-size:12px;color:var(--muted);line-height:2}
-    .foot{border-top:1px solid var(--line);text-align:center;padding:24px 16px 36px;color:var(--muted);font-size:10px;letter-spacing:.1em}
-    .reveal{opacity:0;transform:translateY(21px);transition:opacity .9s ease,transform .9s ease}
-    .reveal.visible{opacity:1;transform:none}
-    @keyframes reveal{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
-    .editor-launch{position:fixed;bottom:18px;right:18px;z-index:94;background:var(--ink);color:white;border:0;border-radius:999px;box-shadow:0 9px 24px #0002;padding:11px 17px;font-size:13px;display:none}
-    body.editor-enabled .editor-launch{display:block}
-    .editor-panel{position:fixed;z-index:100;right:0;top:0;bottom:0;width:min(440px,100vw);background:#fffaf7;box-shadow:-18px 0 55px rgba(71,50,59,.17);overflow:auto;display:none;padding:26px 24px 38px;color:#493e42;font-family:var(--sans)}
-    body.editor-open .editor-panel{display:block}
-    body.editor-open .editor-launch{display:none}
-    .editor-top{display:flex;align-items:start;justify-content:space-between;gap:12px;padding-bottom:15px;border-bottom:1px solid #e9d9d9}
-    .editor-panel h3{margin:0 0 7px;font-size:21px}
-    .editor-panel .desc{font-size:12px;line-height:1.8;color:#937f82;margin:0}
-    .editor-close{background:none;border:1px solid #e9d9d9;border-radius:8px;padding:6px 10px;font-size:13px}
-    .editor-controls{display:grid;gap:14px;margin-top:20px}
-    .editor-controls label{display:block;font-size:12px;font-weight:600;color:#6a545c;margin-bottom:6px}
-    .editor-controls input,.editor-controls select,.editor-controls textarea{display:block;width:100%;padding:11px 12px;background:#fff;border:1px solid #e5d5d7;border-radius:9px;font-size:13px;color:#493e42;outline-color:#c98f9d}
-    .editor-controls textarea{min-height:132px;resize:vertical;line-height:1.8}
-    .editor-section{font-size:11px;font-weight:bold;letter-spacing:.15em;color:#be8794;text-transform:uppercase;margin:5px 0 -4px;padding-top:16px;border-top:1px solid #e9d9d9}
-    .editor-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .editor-actions{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}
-    .editor-btn{border:1px solid #d8b5bc;background:#fff;padding:11px 13px;border-radius:9px;font-size:13px;color:#6f5058}
-    .editor-btn.primary{background:#b77d8d;color:white;border-color:#b77d8d;font-weight:600}
-    .editor-help{font-size:11px;color:#877478;line-height:1.85;background:#f6efed;border-radius:11px;padding:13px;margin-top:20px}
-    .toast{position:fixed;z-index:120;left:50%;bottom:29px;transform:translateX(-50%);background:#493e42;color:white;border-radius:999px;padding:11px 18px;font-size:12px;opacity:0;pointer-events:none;transition:opacity .25s;max-width:90vw;text-align:center}
-    .toast.show{opacity:1}
-    @media(max-width:440px){.cover{padding:75px 23px 45px}.chapter{padding:78px 27px 90px}.chapter-num{top:-30px;font-size:78px}.flip-grid{gap:8px}.flip-card{height:155px}.flip-face{padding:9px}.flip-face.front span:nth-child(2){font-size:13px}.flip-face.back{font-size:11px;line-height:1.7}.editor-panel{padding:20px 18px 34px}}
-    @media(max-width:350px){.flip-grid{grid-template-columns:1fr}.flip-card{height:120px}.flip-face.back{font-size:12px}.chapter{padding-left:22px;padding-right:22px}}
-    @media(min-width:850px){.chapter{min-height:86vh}.cover{min-height:100vh}}
-    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
-    body.motion-off .spark{animation:none;opacity:.09}
-    body.motion-off .reveal{opacity:1;transform:none;transition:none}
-    body.motion-off .cover-content{animation:none}
-
-    /* Quiet, accessible background music button */
-    .music-control{position:fixed;z-index:80;top:max(16px,env(safe-area-inset-top));right:16px;display:flex;align-items:center;gap:7px;background:rgba(255,250,247,.90);border:1px solid var(--line);backdrop-filter:blur(12px);color:var(--ink);box-shadow:0 8px 24px rgba(110,73,80,.09);padding:10px 14px;border-radius:40px;font-size:12px;letter-spacing:.04em;transition:transform .2s,background .2s}
-    .music-control:hover{transform:translateY(-2px)}
-    .music-symbol{font-size:17px;line-height:1;color:var(--accent)}
-    .music-control.playing .music-symbol{animation:musicPulse 1.7s ease-in-out infinite}
-    @keyframes musicPulse{50%{transform:scale(1.22)}}
-    /* The edit workspace lives BELOW the final chapter, not in a floating sidebar. */
-    .editor-panel{position:relative;inset:auto;display:none;width:100%;max-width:none;box-shadow:none;overflow:visible;padding:60px 20px 75px;background:#f2e9e7;color:#493e42}
-    body.editor-enabled .editor-panel{display:block}
-    .editor-inner{max-width:900px;margin:auto}
-    .editor-top{align-items:center;padding:0 0 22px;gap:25px}
-    .editor-top h3{font-family:var(--serif);font-weight:500;font-size:28px;margin:0 0 8px}
-    .editor-panel .desc{font-size:13px;line-height:1.85;max-width:580px}
-    .editor-tag{display:inline-block;color:#8c6772;border:1px solid #cfb5bc;border-radius:99px;padding:6px 11px;font-size:11px;white-space:nowrap}
-    .editor-controls{display:block;margin-top:23px}
-    .edit-group{margin:0 0 15px;padding:20px 21px 9px;border-radius:17px;background:#fffaf8;border:1px solid #e9dcd9;box-shadow:0 5px 15px rgba(85,55,62,.025)}
-    .edit-group h4{font-size:15px;font-weight:600;margin:0 0 17px;color:#664a52;letter-spacing:.025em}
-    .edit-group-note{font-size:12px;line-height:1.85;color:#927f82;margin:-7px 0 16px}
-    .edit-two-col{display:grid;grid-template-columns:1fr 1fr;gap:13px}
-    .editor-controls .editor-field{margin:0 0 17px}
-    .editor-controls label{margin-bottom:7px;font-size:12px}
-    .editor-controls textarea{min-height:120px;font-size:13px;line-height:1.8}
-    .editor-controls input,.editor-controls select{font-size:13px}
-    .editor-controls details{margin:0 0 11px;border:1px solid #e7d7d8;border-radius:14px;overflow:hidden;background:#fffaf8}
-    .editor-controls details[open]{box-shadow:0 8px 22px rgba(118,70,84,.045)}
-    .editor-controls summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;padding:16px 18px;font-size:14px;color:#6d4a57;list-style:none;font-weight:600}
-    .editor-controls summary::-webkit-details-marker{display:none}
-    .editor-controls summary::after{content:'⌄';color:#ad8190;font-size:20px;transition:transform .2s}
-    .editor-controls details[open] summary::after{transform:rotate(180deg)}
-    .details-fields{padding:2px 19px 2px;border-top:1px solid #f1e5e2}
-    .editor-actions{margin:23px 0 14px;gap:10px}
-    .editor-btn{font-size:13px;transition:transform .15s}
-    .editor-btn:hover{transform:translateY(-2px)}
-    .editor-btn.primary{background:#b77d8d}
-    .editor-help{font-size:12px;line-height:1.95}
-    .edit-preview-link{border:0;background:none;padding:4px 0 13px;color:#ad7b88;text-decoration:underline;text-underline-offset:4px;font-size:12px}
-    .audio-status{font-size:12px;color:#91757b;line-height:1.8;margin:0 0 15px}
-    .file-select{padding:13px;border:1px dashed #d3afb8;background:#fdf7f4;border-radius:10px;margin:0 0 15px}
-    .file-select input[type=file]{border:0;padding:6px 0;background:transparent}
-    .editor-divider{height:1px;background:#e4cdd2;margin:24px 0}
-    .debug-warning{font-size:12px;line-height:1.8;color:#80666e;background:#fff7f4;border-radius:10px;padding:13px 16px;margin:18px 0}
-    @media(max-width:550px){.music-control{right:12px;top:max(12px,env(safe-area-inset-top));padding:9px 12px;font-size:11px}.editor-panel{padding:42px 15px 65px}.editor-top{align-items:flex-start;flex-direction:column;gap:10px}.editor-top h3{font-size:25px}.edit-group{padding:17px 14px 5px}.edit-two-col{grid-template-columns:1fr;gap:0}.details-fields{padding:0 15px}.editor-actions{flex-direction:column}.editor-btn{width:100%}}
-    @media(prefers-reduced-motion:reduce){.music-control.playing .music-symbol{animation:none}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f8f3ef">
+<meta name="description" content="有些话，想慢慢说给你听。">
+<title>我们的故事 · 有些话想说给你听</title>
+<style>
+:root{--paper:#f8f3ef;--paper2:#fffaf7;--ink:#493e42;--muted:#887479;--accent:#bd8192;--accent2:#e3b7c1;--line:#e9d9d9;--glow:rgba(209,150,165,.24);--scale:1;--serif:"Songti SC","STSong","Noto Serif SC","SimSun",serif;--sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;width:100%}
+body{height:100svh;overflow:hidden;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+body.editor-enabled{height:auto;min-height:100svh;overflow-y:auto}
+button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:3px}button:disabled{opacity:.45;cursor:not-allowed}::selection{background:#ebccd4}
+.stage{height:100svh;height:100dvh;position:relative;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 19% 12%,var(--glow),transparent 44%),radial-gradient(ellipse at 84% 82%,rgba(229,197,169,.14),transparent 48%),var(--paper)}
+.stage:before,.stage:after{content:"";position:absolute;border:1px solid var(--line);border-radius:50%;pointer-events:none;opacity:.65;z-index:-1}
+.stage:before{width:410px;height:410px;top:-280px;right:-235px}.stage:after{width:300px;height:300px;left:-219px;bottom:-206px}
+.ambient{position:absolute;inset:0;pointer-events:none;overflow:hidden}.ambient i{position:absolute;width:4px;height:4px;border-radius:50%;background:var(--accent2);opacity:.17;animation:float 23s linear infinite}.ambient i:nth-child(1){left:9%;top:16%;animation-delay:-2s}.ambient i:nth-child(2){left:80%;top:32%;animation-delay:-7s}.ambient i:nth-child(3){left:32%;top:80%;animation-delay:-13s}.ambient i:nth-child(4){left:92%;top:73%;animation-delay:-5s}.ambient i:nth-child(5){left:54%;top:6%;animation-delay:-16s}@keyframes float{0%{transform:translateY(15px);opacity:.1}50%{transform:translateY(-26px);opacity:.36}100%{transform:translateY(-80px);opacity:.06}}
+.scene{position:absolute;inset:0;display:none;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--line) transparent;touch-action:pan-y}
+.scene.active{display:block;animation:appear .6s ease both}
+@keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.scene-center{min-height:100%;width:100%;display:flex;align-items:center;justify-content:center;padding:76px 26px 112px}
+.page-content{width:100%;max-width:640px;margin:auto}
+.cover .scene-center{text-align:center;padding-bottom:64px}.cover-box{max-width:480px;width:100%;margin:auto}
+.eyebrow{font-size:calc(14px * var(--scale));color:var(--muted);letter-spacing:.16em;margin:0 auto 18px;line-height:1.8}
+.ornament{display:flex;justify-content:center;align-items:center;gap:13px;color:var(--accent);margin:20px auto}.ornament:before,.ornament:after{content:"";width:43px;height:1px;background:var(--line)}
+.flower{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.cover-recipient{font-size:calc(17px * var(--scale));color:var(--muted);letter-spacing:.13em;line-height:1.85}
+.cover h1{font:500 clamp(43px,11vw,65px)/1.4 var(--serif);letter-spacing:.10em;margin:18px 0 10px}
+.cover-subtitle{color:var(--muted);font-size:calc(18px * var(--scale));letter-spacing:.035em;line-height:2.05;max-width:370px;margin:12px auto 24px}
+.envelope-wrap{width:264px;height:190px;margin:25px auto 8px;display:flex;align-items:end;justify-content:center;perspective:900px}
+.envelope-btn{position:relative;width:256px;height:162px;border:0;background:transparent;filter:drop-shadow(0 16px 20px rgba(105,76,81,.13));transition:transform .3s}.envelope-btn:hover{transform:translateY(-4px)}
+.envelope-back{position:absolute;inset:0;background:#eed2d6;border-radius:5px}.envelope-letter{position:absolute;z-index:1;width:204px;height:125px;left:26px;top:20px;border:1px solid #ebd7d9;background:#fffcfa;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:#c38699;transition:transform .73s cubic-bezier(.17,.78,.22,1);font-size:29px}.envelope-letter small{font-size:13px;letter-spacing:.15em;color:var(--muted)}.envelope-front{position:absolute;inset:0;z-index:3;background:#edd0d4;clip-path:polygon(0 0,50% 54%,100% 0,100% 100%,0 100%)}.envelope-side{position:absolute;inset:0;z-index:4;background:#f5dee1;clip-path:polygon(0 100%,50% 48%,100% 100%)}.envelope-flap{position:absolute;inset:0;z-index:5;background:#e4bdc5;clip-path:polygon(0 0,50% 59%,100% 0);transform-origin:top;transition:transform .67s ease,z-index .1s .28s}.envelope-seal{position:absolute;z-index:6;top:77px;left:calc(50% - 18px);width:36px;height:36px;border-radius:50%;background:#c58b9a;display:grid;place-content:center;color:white;font-size:20px;transition:opacity .3s,transform .3s}.envelope-btn.opened .envelope-flap{transform:rotateX(180deg);z-index:0}.envelope-btn.opened .envelope-letter{transform:translateY(-77px)}.envelope-btn.opened .envelope-seal{opacity:0;transform:scale(.5)}
+.cover-hint{color:var(--muted);font-size:calc(16px * var(--scale));line-height:1.8;margin:18px 0 0}.cover-footer{font-size:calc(16px * var(--scale));line-height:2;color:var(--muted);margin:28px auto 0;max-width:340px}
+.story-title-note{font-size:calc(15px * var(--scale));letter-spacing:.14em;color:var(--accent);margin:0 0 16px;font-weight:600}
+.story-title{font-family:var(--serif);font-weight:500;font-size:clamp(31px,8vw,43px);letter-spacing:.035em;line-height:1.55;margin:0 0 20px}
+.divider{width:45px;height:1px;background:var(--accent2);margin-bottom:27px}
+.story-body{font-size:calc(18px * var(--scale));line-height:2.0;letter-spacing:.012em;overflow-wrap:break-word}.story-body p{margin:0 0 1.2em}
+.story-quote{margin:25px 0 0;padding:14px 8px 14px 18px;border-left:2px solid var(--accent2);font:400 calc(18px * var(--scale))/1.9 var(--serif);color:var(--muted)}
+.cards-title{font-size:calc(18px * var(--scale));line-height:1.8;color:var(--muted);margin:24px 0 16px}
+.flip-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.flip-card{border:0;background:none;position:relative;perspective:900px;min-height:190px;padding:0}.flip-inner{position:absolute;inset:0;transition:transform .65s ease;transform-style:preserve-3d}.flip-card.flipped .flip-inner{transform:rotateY(180deg)}.flip-face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--paper2);border:1px solid var(--line);border-radius:16px;padding:14px;text-align:center;box-shadow:0 10px 28px rgba(120,84,93,.055)}.flip-face.front span:first-child{color:var(--accent);font-size:28px}.flip-face.front strong{font:500 calc(21px * var(--scale))/1.5 var(--serif)}.flip-face.front small{font-size:calc(16px * var(--scale));color:var(--muted)}.flip-face.back{transform:rotateY(180deg);font-size:calc(20px * var(--scale));line-height:1.65;padding:16px;overflow-wrap:anywhere}
+.end-flower{display:block;width:61px;height:61px;margin:28px auto 20px;color:var(--accent)}.end-message{font:500 calc(22px * var(--scale))/1.9 var(--serif);text-align:center;margin:18px auto 16px;max-width:520px}.end-note{font-size:calc(17px * var(--scale));color:var(--muted);text-align:center;line-height:1.95;margin:0 auto;max-width:500px}.end-footer{margin:24px auto;text-align:center;color:var(--muted);font-size:calc(15px * var(--scale))}
+.navigation{position:absolute;bottom:0;left:0;right:0;z-index:18;display:none;justify-content:center;align-items:center;gap:10px;padding:13px 18px calc(16px + env(safe-area-inset-bottom));background:linear-gradient(0deg,var(--paper) 61%,rgba(248,243,239,0));pointer-events:none}
+.navigation.show{display:flex}.nav-btn{pointer-events:auto;min-height:49px;border:1px solid var(--line);border-radius:999px;background:rgba(255,250,247,.94);padding:12px 21px;font-size:calc(16px * var(--scale));color:var(--ink);box-shadow:0 7px 19px rgba(105,76,81,.07)}.nav-btn.primary{background:var(--accent);color:white;border-color:var(--accent);font-weight:600;min-width:151px}.nav-btn.secondary{color:var(--muted);background:var(--paper2)}
+.music-control{position:absolute;top:calc(14px + env(safe-area-inset-top));right:14px;z-index:22;min-height:42px;border:1px solid var(--line);border-radius:999px;background:rgba(255,251,248,.94);color:var(--ink);box-shadow:0 6px 19px rgba(105,76,81,.09);padding:9px 14px;display:flex;align-items:center;gap:7px;font-size:15px}.music-control.playing .music-note{animation:pulse 1.6s ease-in-out infinite}@keyframes pulse{50%{transform:scale(1.28)}}.music-note{font-size:19px;color:var(--accent)}
+.editor-panel{display:none;background:#f2e9e7;color:#493e42;position:relative;z-index:30;padding:50px 18px 75px}.editor-enabled .editor-panel{display:block}.editor-inner{max-width:860px;margin:auto}.editor-title{font:500 29px/1.5 var(--serif);margin:0 0 8px}.editor-intro{font-size:15px;line-height:1.85;color:#78656b;margin:0 0 17px}.editor-warning{background:#fff8f4;padding:16px;border-radius:14px;color:#77626a;font-size:14px;line-height:1.9;margin:12px 0 22px}.edit-group{border:1px solid #e7d9d7;border-radius:16px;background:#fffaf8;padding:19px;margin:0 0 17px}.edit-group h3{margin:0 0 12px;font-size:19px;color:#634951}.edit-note{font-size:14px;color:#8f777f;line-height:1.7;margin:0 0 15px}.edit-field{margin:0 0 15px}.edit-field label{display:block;font-size:15px;color:#634951;font-weight:600;margin:0 0 7px}.edit-field input,.edit-field textarea,.edit-field select{width:100%;padding:12px;border:1px solid #e5d5d7;border-radius:10px;background:white;color:#493e42;font-size:16px}.edit-field textarea{min-height:122px;resize:vertical;line-height:1.75}.edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.edit-details{margin:0 0 12px;border-radius:13px;border:1px solid #e7d7d8;overflow:hidden;background:#fff}.edit-details summary{cursor:pointer;padding:16px;list-style:none;font-weight:600;color:#6c4c58;font-size:17px}.edit-details summary::-webkit-details-marker{display:none}.edit-details[open] summary{border-bottom:1px solid #f1e8e7}.edit-details-body{padding:16px 16px 4px}.edit-preview{border:0;background:none;padding:8px 0 13px;color:#a46d7e;text-decoration:underline;text-underline-offset:3px;font-size:15px}.edit-buttons{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0}.edit-btn{border-radius:11px;padding:13px 19px;background:white;color:#6f5058;border:1px solid #d8b5bc;min-height:47px}.edit-btn.primary{background:#b77d8d;color:white;border-color:#b77d8d;font-weight:600}.music-status{color:#826d74;font-size:15px;line-height:1.7;overflow-wrap:anywhere}.file-pick{width:100%;font-size:15px;margin:5px 0 15px}.editor-help{font-size:14px;line-height:1.85;color:#806b72}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));z-index:100;transform:translateX(-50%);background:#493e42;color:white;padding:12px 18px;border-radius:13px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:min(520px,90vw);width:max-content;text-align:center;font-size:14px;line-height:1.5}.toast.show{opacity:1}
+@media(max-width:600px){.scene-center{padding:79px 26px 112px}.story-title{font-size:clamp(31px,8vw,38px)}.flip-grid{grid-template-columns:1fr;gap:11px}.flip-card{min-height:134px}.flip-face{padding:12px 19px}.flip-face.back{font-size:calc(20px * var(--scale));line-height:1.65}.music-control{top:calc(10px + env(safe-area-inset-top));right:11px}.edit-grid{grid-template-columns:1fr;gap:0}.editor-title{font-size:25px}.edit-group{padding:17px 14px}.edit-buttons{flex-direction:column}.edit-btn{width:100%}.navigation{gap:9px}.nav-btn{padding:11px 18px}}
+@media(max-width:360px){.scene-center{padding-left:22px;padding-right:22px}.cover h1{font-size:39px}.story-body{font-size:calc(17px * var(--scale))}.flip-face.back{font-size:calc(19px * var(--scale))}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+.motion-off .ambient i{animation:none}.motion-off .scene.active{animation:none}
+</style>
 </head>
 <body>
 <script type="application/json" id="site-data">
 {
   "recipient": "给特别的你",
-  "eyebrow": "A LITTLE LETTER FOR YOU",
+  "eyebrow": "想把心里的话，慢慢说给你听",
   "heroTitle": "我们的故事",
-  "heroSubtitle": "有些话，想慢慢说给你听。",
-  "endLine": "如果我们的故事还有下一页，我希望我们都能更自在、更认真地写好它。",
-  "endNote": "谢谢你愿意读到这里。你不需要立刻回应，我尊重你的感受和决定。",
-  "footer": "这封信，没有必须回答的问题。",
+  "heroSubtitle": "有些话，想认真地告诉你。",
+  "coverFooter": "不需要急着回答，只希望你愿意听我说一说。",
   "theme": "rose",
-  "music": {"src": "music.mp3", "volume": 0.35},
+  "music": {"src":"music.mp3","volume":0.35},
   "fontScale": 1,
   "motion": true,
   "cards": [
-    {"title": "关于喜欢", "text": "喜欢不只是对你好，也是想了解真实的你，欣赏你本来的样子。"},
-    {"title": "关于相处", "text": "比起一味付出，我更想学会倾听、理解和坦诚沟通。"},
-    {"title": "关于以后", "text": "不需要每一天都很特别，我更向往两个人在平凡日子里的自在与安心。"}
+    {"title":"关于喜欢","text":"喜欢不只是对你好，也是想了解真实的你，欣赏你本来的样子。"},
+    {"title":"关于相处","text":"比起一味付出，我更想学会倾听、理解和坦诚沟通。"},
+    {"title":"关于以后","text":"不需要每一天都很特别，我更向往两个人在平凡日子里的自在与安心。"}
   ],
   "chapters": [
-    {"kicker": "CHAPTER 01 · 写在最开始", "title": "有些话，想好好告诉你", "body": "其实我想了很久，该怎样把这些话认真地说给你听。\n\n我不想用很多漂亮的话来改变你的决定，也不想让你读完后觉得需要马上回答。只是有些真实的心情，我想好好表达一次。", "quote": "这封信，从来不是一道要你回答的题。"},
-    {"kicker": "CHAPTER 02 · 关于靠近", "title": "我们曾经，慢慢地靠近过", "body": "从开始熟悉，到渐渐有了不一样的好感，我们曾认真地靠近过彼此。\n\n那段相处对我来说很珍贵。不是因为它一定要走向某个结果，而是因为在那段时间里，我真切地感受到与你相处的快乐，也开始期待更多的可能。\n\n我知道，过去的好感不能代替现在的感受。但那份心动和真诚，对我而言都是真实的。", "quote": "有些靠近，本身就值得珍惜。"},
-    {"kicker": "CHAPTER 03 · 关于喜欢", "title": "我想要的，不只是对你好", "body": "你说过，身边已经有很多对你好的人，我理解你的意思。\n\n我也慢慢明白，仅仅对你好，并不是我们一定要在一起的理由。你不需要因为我的付出而有所回应，更没有义务因此选择我。\n\n我真正期待的，是两个人都愿意靠近：能分享开心的小事，也能认真倾听不开心的原因；有各自的生活，也愿意走进彼此的世界。\n\n我喜欢的是你这个人，而不是一个需要我不断证明自己有多好的人。", "quote": "我期待的，是相互喜欢，而不是单方面的感动。"},
-    {"kicker": "CHAPTER 04 · 关于反思", "title": "有些事情，我确实没有做好", "body": "这一次让你不开心的事情，我没有处理好。对不起。\n\n我知道，不能因为自己没有恶意，就忽略你真实的不舒服。比起急着解释，我更应该认真听懂你在意的是什么。\n\n我会反思自己的表达和相处方式。那些应该改变的地方，需要以后用行动去证明，而不只是写在这里。", "quote": "【正式分享前，请把这一章改成具体、真实的事情与反思。】"},
-    {"kicker": "CHAPTER 05 · 关于以后", "title": "如果故事还有下一页", "body": "我仍然期待和你继续认识彼此。不是回到什么都没有发生的时候，而是在彼此更了解的基础上，重新学着好好相处。\n\n我希望我们不必刻意扮演谁期待的样子。开心可以分享，难过可以说出口，遇到分歧也能沟通，而不是让误会慢慢累积。\n\n如果你愿意，我们可以放慢一点；如果你并不愿意，我也会尊重你的选择。", "quote": "好的关系，应该让两个人都愿意、也都自在。"},
-    {"kicker": "CHAPTER 06 · 最后想说", "title": "谢谢你，读到这里", "body": "谢谢你曾经认真地靠近过我，也谢谢你愿意看完这些话。\n\n你对我而言是特别的，所以我想把这些心情好好说清楚。\n\n我确实希望还有机会，但我不想让自己的希望变成你的压力。无论接下来怎样，我都会认真对待你的感受。", "quote": "有些话说出口，是为了真诚，而不是为了索取一个答案。"}
-  ]
+    {"kicker":"想和你说","title":"有些话，想好好告诉你","body":"其实我想了很久，该怎样把这些话认真地说给你听。\n\n我不是想用一封信改变你的决定，也不是想让你读完就必须回答什么。只是有些心里的感受，我不想草草带过。\n\n如果你愿意，就让我慢慢把它们说完。","quote":"有些在意，值得好好表达。"},
+    {"kicker":"关于遇见","title":"我们曾经，慢慢地靠近过","body":"从开始熟悉，到渐渐有了不一样的好感，我们曾经认真地靠近过彼此。\n\n那段相处对我来说很珍贵。不是因为它一定要走向什么结果，而是因为和你聊天、了解你的时候，我确实感受到一种不一样的快乐。\n\n我知道，曾经的好感不能替代你现在的想法。可那份心动，对我而言一直都是真实的。","quote":"我很珍惜，我们曾愿意靠近彼此。"},
+    {"kicker":"关于心动","title":"你对我来说，真的很特别","body":"有时候，喜欢不是某一个突然发生的瞬间，而是在相处中慢慢发现：原来自己会期待一个人的消息，会留意她说过的小事，也会忍不住想和她分享生活。\n\n我想靠近的是你本来的样子，包括你的想法、你的坚持，还有那些我尚未了解的部分。\n\n我不想用几句好听的话把你形容得完美，只是想认真地认识真正的你。","quote":"真正让我心动的，是你这个人。"},
+    {"kicker":"关于喜欢","title":"我想要的，不只是对你好","body":"你说过，身边已经有很多对你好的人，我理解你的意思。\n\n我也慢慢明白，对你好本来就不应该成为你必须回应我的理由。我不是想成为那个付出最多的人，也不想让你因此觉得有负担。\n\n我所期待的，是两个互相喜欢的人，能分享开心的小事，也能认真倾听不开心的原因；有自己的生活，也愿意走进彼此的世界。","quote":"我期待的是彼此喜欢，而不是单方面的感动。"},
+    {"kicker":"关于那次不愉快","title":"有些事情，我确实没有做好","body":"这次让你不开心的事情，我没有处理好。对不起。\n\n我知道，不能因为自己没有恶意，就忽略你的真实感受。比起着急解释，我更应该认真听懂你为什么难过、你在意的究竟是什么。\n\n我不想用一句“以后不会了”就轻轻带过。需要改变的地方，应该体现在我今后的言语和行动里。","quote":"我会把这次不愉快认真放在心上，也认真面对自己的问题。"},
+    {"kicker":"关于理解","title":"如果可以，我们慢一点也没关系","body":"我不希望你因为我的期待，就勉强自己做出决定。\n\n如果曾经的相处让你感觉轻松，而现在的一些事情让你开始犹豫，那我愿意正视这些变化，也愿意把节奏慢下来。\n\n我们不需要立刻确定未来会怎样。对我来说，比急着得到一个答案更重要的，是彼此能不能真诚、舒服地相处。","quote":"慢一点没关系，重要的是我们都愿意。"},
+    {"kicker":"关于以后","title":"我想象中的我们","body":"我仍然期待和你继续认识彼此。不是假装什么都没发生过，而是在更了解对方的基础上，重新学着好好相处。\n\n我希望未来的相处里，开心能够自然分享，难过能够坦诚说出口，遇到分歧也能坐下来好好沟通。\n\n我想成为可以和你并肩相处的人，而不只是一个不断说着“我会对你好”的人。","quote":"好的关系，应该让两个人都自在。"},
+    {"kicker":"最后想说","title":"如果故事还有下一页","body":"谢谢你曾经认真地靠近过我，也谢谢你愿意听我说完这些话。\n\n你对我而言是特别的，所以我才想认真争取一次。我确实希望，我们还有机会好好相处，看看彼此之间是否还有继续走下去的可能。\n\n但我知道，喜欢不能代替你的选择。如果你需要时间，我愿意尊重；如果你的决定已经很明确，我也会尊重。","quote":"如果还有下一页，我想更认真地写好它。"}
+  ],
+  "endLine":"无论怎样，谢谢你愿意听我说这些。",
+  "endNote":"你不需要立刻回应。你的感受和选择，我都会认真对待。",
+  "footer":"这封信，没有必须回答的问题。"
 }
 </script>
-<div class="page-frame">
-  <div class="grain" aria-hidden="true"></div>
-  <div class="ambient" aria-hidden="true"><i class="spark"></i><i class="spark"></i><i class="spark"></i><i class="spark"></i><i class="spark"></i><i class="spark"></i></div>
-  <div class="progress" aria-hidden="true"><div class="progress-fill" id="progress-fill"></div></div>
-  <header class="cover" id="top">
-    <div class="cover-content">
-      <div class="eyebrow" id="hero-eyebrow">A LITTLE LETTER FOR YOU</div>
-      <div class="ornament"><svg class="tiny-flower" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12C8 10 7 6 10 5c2-1 4 2 2 7zm0 0c2-4 6-5 7-2 1 2-2 4-7 2zm0 0c4 2 5 6 2 7-2 1-4-2-2-7zm0 0c-2 4-6 5-7 2-1-2 2-4 7-2z"/><circle cx="12" cy="12" r="1.4"/></svg></div>
-      <p class="recipient" id="hero-recipient">给特别的你</p>
-      <h1 id="hero-title">我们的故事</h1>
-      <p class="cover-tag" id="hero-subtitle">有些话，想慢慢说给你听。</p>
-      <div class="envelope-wrap">
-        <button class="envelope-btn" id="open-letter" aria-label="打开这封信" title="打开这封信">
-          <span class="envelope-back"></span>
-          <span class="envelope-letter"><span aria-hidden="true" style="font-size:25px">♡</span><small>FOR YOU</small></span>
-          <span class="envelope-front"></span><span class="envelope-side"></span>
-          <span class="envelope-flap"></span><span class="envelope-seal" aria-hidden="true">♡</span>
-        </button>
-      </div>
-      <div class="open-hint">轻轻点开这封信</div>
-      <div class="scroll-mark"><span></span>写给你的六个章节<span></span></div>
-    </div>
+<div class="stage" id="stage">
+  <div class="ambient" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+  <header class="scene cover active" id="cover-scene" aria-label="打开信件">
+    <div class="scene-center"><div class="cover-box">
+      <p class="eyebrow" id="hero-eyebrow"></p>
+      <div class="ornament"><svg class="flower" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12C8 10 7 6 10 5c2-1 4 2 2 7zm0 0c2-4 6-5 7-2 1 2-2 4-7 2zm0 0c4 2 5 6 2 7-2 1-4-2-2-7zm0 0c-2 4-6 5-7 2-1-2 2-4 7-2z"/><circle cx="12" cy="12" r="1.4"/></svg></div>
+      <p class="cover-recipient" id="hero-recipient"></p><h1 id="hero-title"></h1><p class="cover-subtitle" id="hero-subtitle"></p>
+      <div class="envelope-wrap"><button class="envelope-btn" id="open-letter" type="button" aria-label="打开这封信"><span class="envelope-back"></span><span class="envelope-letter"><span aria-hidden="true">♡</span><small>只写给你</small></span><span class="envelope-front"></span><span class="envelope-side"></span><span class="envelope-flap"></span><span class="envelope-seal" aria-hidden="true">♡</span></button></div>
+      <p class="cover-hint">轻轻点开这封信</p><p class="cover-footer" id="hero-footer"></p>
+    </div></div>
   </header>
-  <main id="story" aria-label="写给你的信"></main>
-  <section class="ending" id="ending"><div class="ending-inner reveal">
-    <svg class="ending-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M32 51V23M32 36c-11 0-19-7-19-16 10 0 17 7 19 16Zm0-7c0-11 7-18 18-18 0 10-7 17-18 18Z"/><path d="M32 23c-5-7-5-16 0-20 5 4 5 13 0 20Zm0 0c7-7 16-6 20-2-4 6-13 7-20 2Zm0 0c-7-7-16-6-20-2 4 6 13 7 20 2Z"/><path d="M24 55c6-3 12-3 18 0"/></svg>
-    <div class="ending-line" id="ending-line"></div><p class="ending-note" id="ending-note"></p>
-  </div></section>
-  <footer class="foot" id="footer-text"></footer>
+  <main id="story" aria-label="想说给你的话"></main>
+  <nav class="navigation" id="navigation" aria-label="翻页按钮"><button class="nav-btn secondary" type="button" id="nav-back">上一页</button><button class="nav-btn primary" type="button" id="nav-next">下一页　›</button></nav>
+  <button class="music-control" type="button" id="music-toggle" aria-label="播放背景音乐" aria-pressed="false"><span class="music-note" aria-hidden="true">♫</span><span id="music-label">播放音乐</span></button>
 </div>
-<button type="button" class="music-control" id="music-toggle" aria-label="播放背景音乐" aria-pressed="false"><span class="music-symbol" aria-hidden="true">♫</span><span id="music-label">播放音乐</span></button>
-<audio id="background-audio" loop preload="none" aria-hidden="true"></audio>
-<section class="editor-panel" id="editor-panel" aria-label="网页底部调试面板">
-  <div class="editor-inner">
-    <div class="editor-top"><div><div class="editor-tag">仅调试模式显示</div><h3>给这封信做最后的调整</h3><p class="desc">六章可以逐章修改，改动即时生效并保存在本机浏览器。音乐可本地选择试听，确认后导出 HTML，再上传 GitHub Pages。</p></div></div>
-    <div class="debug-warning">⚑ 这只是本地调试工具：在 GitHub Pages 上修改文字并不会直接更新网站。改完请导出新版 <b>index.html</b>，再替换仓库中的旧文件。向她分享不带 <b>?edit=1</b> 的网址即可隐藏调试面板。</div>
-    <div class="editor-controls" id="editor-fields"></div>
-    <div class="editor-actions"><button class="editor-btn primary" id="export-html" type="button">↓ 导出修改后的 index.html</button><button class="editor-btn" id="reset-site" type="button">恢复初始示例</button></div>
-    <div class="editor-help"><b>音乐说明：</b>上面的音乐按钮用于播放 / 暂停（不会自动播放）。在下方选好文件后，可以立即试听；但选择音乐只影响当前预览。将网页部署到 GitHub 时，请把选中的音乐文件与 <b>index.html</b> 一起放在仓库根目录，确保文件名与音乐路径一致。<br><b>隐私提醒：</b>GitHub Pages 一般公开可访问，任何拿到网址的人都可能看到内容。编辑参数不是密码；请避免写入敏感信息。</div>
-  </div>
-</section>
+<audio id="background-audio" loop preload="none"></audio>
+<section class="editor-panel" id="editor-panel" aria-label="网页调试区域"><div class="editor-inner">
+  <h2 class="editor-title">把想说的话，调整到刚刚好</h2>
+  <p class="editor-intro">这里可以单独修改每一页的内容、三张小卡片、背景颜色和音乐。调试工具只在你使用带有 ?edit=1 的网址时出现，位于整页最下方。</p>
+  <div class="editor-warning">调试修改会暂存在当前浏览器里，不会直接同步到 GitHub。调整完成后，请点击下方的“导出新版网页”，再上传替换仓库中的 <strong>index.html</strong>。正式分享的链接不要加 ?edit=1。</div>
+  <div id="editor-fields"></div>
+  <div class="edit-buttons"><button class="edit-btn primary" type="button" id="export-html">导出新版 index.html</button><button class="edit-btn" type="button" id="reset-site">恢复当前网页原始内容</button><button class="edit-btn" type="button" id="preview-cover">回到封面预览</button></div>
+  <p class="editor-help">背景音乐不会自动播放，需要点击右上角“播放音乐”。音乐文件需要和 index.html 一起放在 GitHub 仓库根目录。网页会尝试“music.mp3”和之前提供的音乐原名；你也可以在下方填写精确的音乐文件名。</p>
+</div></section>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 (()=>{'use strict';
-  const original = JSON.parse(document.getElementById('site-data').textContent);
-  let site = typeof structuredClone === "function" ? structuredClone(original) : JSON.parse(JSON.stringify(original));
-  const key='our-story-draft-v1';
-  const themes={
-    rose:{paper:'#f8f3ef',paper2:'#fffaf7',ink:'#493e42',muted:'#927e82',accent:'#c88d9b',accent2:'#e2b5be',line:'#e9d9d9',glow:'rgba(209,150,165,.24)'},
-    cream:{paper:'#faf5e9',paper2:'#fffcf4',ink:'#50463d',muted:'#978476',accent:'#bc9a71',accent2:'#e7d5ae',line:'#e8dfce',glow:'rgba(220,191,137,.22)'},
-    lilac:{paper:'#f7f3fb',paper2:'#fdfaff',ink:'#4b415a',muted:'#8b809a',accent:'#ac91be',accent2:'#d4bde4',line:'#e6dcf0',glow:'rgba(177,143,198,.21)'},
-    mist:{paper:'#f3f7f6',paper2:'#fafffd',ink:'#3d5250',muted:'#80928f',accent:'#83aaa0',accent2:'#b7d2c9',line:'#d8e8e4',glow:'rgba(135,182,170,.2)'}
-  };
-  const $=id=>document.getElementById(id);
-  const editorEnabled = new URLSearchParams(location.search).has('edit')||location.hash==='#edit';
-  if(editorEnabled){document.body.classList.add('editor-enabled');try{const saved=localStorage.getItem(key);if(saved){const obj=JSON.parse(saved);if(obj&&Array.isArray(obj.chapters)&&Array.isArray(obj.cards))site=obj;}}catch(e){}}
-  function txt(el,value){el.textContent=String(value??'');}
-  function applyTheme(){const t=themes[site.theme]||themes.rose;for(const [k,v] of Object.entries(t))document.documentElement.style.setProperty('--'+k,v);document.documentElement.style.setProperty('--scale',Number(site.fontScale)||1);document.body.classList.toggle('motion-off',!site.motion)}
-  function elem(tag,className,textContent){const e=document.createElement(tag);if(className)e.className=className;if(textContent!==undefined)e.textContent=textContent;return e;}
-  let observer;
-  function render(){applyTheme();txt($('hero-eyebrow'),site.eyebrow);txt($('hero-recipient'),site.recipient);txt($('hero-title'),site.heroTitle);txt($('hero-subtitle'),site.heroSubtitle);txt($('ending-line'),site.endLine);txt($('ending-note'),site.endNote);txt($('footer-text'),site.footer);document.title=site.heroTitle+' · 写给你的信';
-    const story=$('story');story.replaceChildren();
-    site.chapters.forEach((ch,i)=>{
-      const section=elem('section','chapter');section.id='chapter-'+(i+1);
-      const inner=elem('div','chapter-inner reveal');
-      inner.append(elem('span','chapter-num',String(i+1).padStart(2,'0')),elem('p','chapter-kicker',ch.kicker),elem('h2','',ch.title),elem('div','hairline'));
-      const body=elem('div','chapter-text');String(ch.body||'').split(/\n\s*\n/).filter(s=>s.trim()).forEach(s=>body.append(elem('p','',s.trim())));inner.append(body);
-      if(i===2){inner.append(elem('p','cards-title','三件藏在心里的小事 · 轻点卡片翻开'));const grid=elem('div','flip-grid');site.cards.forEach((card,j)=>{
-        const b=elem('button','flip-card');b.type='button';b.setAttribute('aria-label','翻开'+card.title);b.setAttribute('aria-pressed','false');const fl=elem('span','flip-inner');const f=elem('span','flip-face front');f.append(elem('span','heart','♡'),elem('span','',card.title),elem('small','','轻点翻开'));const back=elem('span','flip-face back',card.text);fl.append(f,back);b.append(fl);b.addEventListener('click',()=>{const flipped=b.classList.toggle('flipped');b.setAttribute('aria-pressed',String(flipped));b.setAttribute('aria-label',(flipped?'收起':'翻开')+card.title)});grid.append(b);
-      });inner.append(grid);}
-      if(ch.quote&&ch.quote.trim())inner.append(elem('blockquote','chapter-quote',ch.quote));
-      if(i<site.chapters.length-1){const go=elem('button','chapter-action','继续读下一章');go.type='button';go.addEventListener('click',()=>document.getElementById('chapter-'+(i+2)).scrollIntoView({behavior:site.motion?'smooth':'auto'}));inner.append(go);}
-      else{const go=elem('button','chapter-action','读到最后一页');go.type='button';go.addEventListener('click',()=>$('ending').scrollIntoView({behavior:site.motion?'smooth':'auto'}));inner.append(go);}
-      section.append(inner);story.append(section);
-    });
-    if(observer)observer.disconnect();
-    const reveals=document.querySelectorAll('.reveal');
-    if('IntersectionObserver' in window&&site.motion&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}}),{threshold:.13});reveals.forEach(e=>observer.observe(e));}else reveals.forEach(e=>e.classList.add('visible'));
-    updateProgress();
-  }
-  let opened=false;
-  $('open-letter').addEventListener('click',()=>{if(opened)return;opened=true;$('open-letter').classList.add('opened');setTimeout(()=>document.getElementById('chapter-1').scrollIntoView({behavior:site.motion?'smooth':'auto'}),site.motion?700:10);});
-  function updateProgress(){const h=document.documentElement;const denom=Math.max(1,h.scrollHeight-innerHeight);$('progress-fill').style.width=Math.min(100,Math.max(0,scrollY/denom*100))+'%';}
-  window.addEventListener('scroll',updateProgress,{passive:true});window.addEventListener('resize',updateProgress,{passive:true});
-  function save(){if(!editorEnabled)return;try{localStorage.setItem(key,JSON.stringify(site));}catch(e){}}
-  let toastTimer;
-  function toast(message){const el=$('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3000)}
-  // Music never autoplays. A visitor must tap the music control to start playback.
-  const audio=$('background-audio');
-  const musicButton=$('music-toggle');
-  let localAudioUrl=null;
-  function prepareMusic(){
-    audio.volume=Math.min(1,Math.max(0,Number(site.music?.volume)??.35));
-    if(!localAudioUrl){audio.src=(site.music?.src||'music.mp3');audio.load();}
-  }
-  function setMusicState(playing){musicButton.classList.toggle('playing',playing);musicButton.setAttribute('aria-pressed',String(playing));musicButton.setAttribute('aria-label',playing?'暂停背景音乐':'播放背景音乐');txt($('music-label'),playing?'暂停音乐':'播放音乐');}
-  musicButton.addEventListener('click',async()=>{
-    if(!audio.paused){audio.pause();return;}
-    try{await audio.play();}
-    catch(e){setMusicState(false);toast('未能播放音乐：请在网页底部调试区选择音频文件，或将音乐文件上传到网站');}
-  });
-  audio.addEventListener('play',()=>setMusicState(true));
-  audio.addEventListener('pause',()=>setMusicState(false));
-  audio.addEventListener('ended',()=>setMusicState(false));
-  audio.addEventListener('error',()=>{if(!audio.paused)audio.pause();setMusicState(false);});
-  const fields=$('editor-fields');
-  function addField(mount,label,field,value,handler,opts={}){
-    const wrap=elem('div','editor-field');const l=elem('label','',label);wrap.append(l);
-    const input=opts.textarea?elem('textarea'):opts.select?elem('select'):elem('input');
-    if(opts.select){opts.select.forEach(([v,text])=>{const op=elem('option','',text);op.value=String(v);input.append(op);});}
-    else if(!opts.textarea){input.type=opts.type||'text';if(opts.type==='range'){input.min=String(opts.min??0);input.max=String(opts.max??1);input.step=String(opts.step??.05);}}
-    input.value=String(value??'');input.id='field-'+field;l.htmlFor=input.id;
-    input.addEventListener((opts.select||opts.type==='file')?'change':'input',()=>{handler(input.value,input);save();render();});
-    wrap.append(input);mount.append(wrap);return input;
-  }
-  function addEditorGroup(title,subtitle){const box=elem('section','edit-group');box.append(elem('h4','',title));if(subtitle)box.append(elem('p','edit-group-note',subtitle));fields.append(box);return box;}
-  function addDetails(title,initiallyOpen){const box=elem('details');box.open=!!initiallyOpen;box.append(elem('summary','',title));const inner=elem('div','details-fields');box.append(inner);fields.append(box);return inner;}
-  function showEditorFields(){
-    if(!editorEnabled)return;
-    fields.replaceChildren();
-    const cover=addEditorGroup('01 · 封面与整体风格','修改后可在网页顶部预览；第六章及结尾位于页面下方。');
-    const c2=elem('div','edit-two-col');cover.append(c2);
-    addField(c2,'她的昵称 / 称呼','recipient',site.recipient,v=>site.recipient=v);
-    addField(c2,'封面英文小字','eyebrow',site.eyebrow,v=>site.eyebrow=v);
-    addField(cover,'主标题','heroTitle',site.heroTitle,v=>site.heroTitle=v);
-    addField(cover,'副标题','heroSubtitle',site.heroSubtitle,v=>site.heroSubtitle=v,{textarea:true});
-    const styleRow=elem('div','edit-two-col');cover.append(styleRow);
-    addField(styleRow,'配色','theme',site.theme,v=>site.theme=v,{select:[['rose','樱花奶油粉'],['cream','暖奶油香槟'],['lilac','淡紫信笺'],['mist','薄荷雾绿']]});
-    addField(styleRow,'文字大小','fontScale',site.fontScale,v=>site.fontScale=Number(v),{select:[['0.9','偏小'],['1','标准'],['1.1','略大'],['1.2','大字']]});
-    addField(cover,'动画开关','motion',String(site.motion),v=>site.motion=v==='true',{select:[['true','开启轻柔动画'],['false','关闭动画']]});
-    const music=addEditorGroup('02 · 背景音乐调试','打开顶部的「播放音乐」按钮即可试听；手机浏览器不允许未经点击自动播放。');
-    const musicPick=elem('div','file-select');const pLabel=elem('label','','选择本地音乐（mp3 / m4a / wav）');pLabel.htmlFor='music-file';const picker=elem('input');picker.id='music-file';picker.type='file';picker.accept='audio/*,.mp3,.m4a,.wav,.aac,.ogg';musicPick.append(pLabel,picker);music.append(musicPick);
-    const status=elem('p','audio-status','当前音乐路径：'+(site.music?.src||'music.mp3'));music.append(status);
-    picker.addEventListener('change',()=>{const file=picker.files&&picker.files[0];if(!file)return;
-      audio.pause();if(localAudioUrl)URL.revokeObjectURL(localAudioUrl);localAudioUrl=URL.createObjectURL(file);audio.src=localAudioUrl;audio.load();
-      site.music??={};site.music.src=file.name;status.textContent='已选择：'+file.name+'。可以点击顶部音乐按钮试听；发布时也要上传此音乐文件。';save();toast('音乐已加载，可以点击右上角播放按钮试听');
-      const pathField=$('field-music-src');if(pathField)pathField.value=file.name;
-    });
-    addField(music,'音乐文件路径 / 文件名','music-src',site.music?.src||'music.mp3',v=>{site.music??={};site.music.src=v; if(localAudioUrl){URL.revokeObjectURL(localAudioUrl);localAudioUrl=null;}audio.pause();prepareMusic();status.textContent='当前音乐路径：'+v;});
-    const vol=addField(music,'音量（0=静音，1=最大）','music-volume',site.music?.volume??.35,v=>{site.music??={};site.music.volume=Math.min(1,Math.max(0,Number(v)));audio.volume=site.music.volume;},{type:'range',min:0,max:1,step:.05});
-    const chapterHeader=addEditorGroup('03 · 六个章节：逐页调整','点击任意章节展开，编辑标题、完整正文和结尾短句。每一项都会立即更新网页，并自动保存在当前浏览器。');
-    const nav=elem('div','edit-two-col');chapterHeader.append(nav);
-    site.chapters.forEach((ch,i)=>{
-      const c=addDetails('第 '+(i+1)+' 章 · '+ch.title,i===0);
-      addField(c,'章节小标题','ch'+i+'kicker',ch.kicker,v=>ch.kicker=v);
-      addField(c,'章节主标题','ch'+i+'title',ch.title,v=>ch.title=v);
-      addField(c,'章节正文（空一行表示新段落）','ch'+i+'body',ch.body,v=>ch.body=v,{textarea:true});
-      addField(c,'章节末尾短句（可留空）','ch'+i+'quote',ch.quote,v=>ch.quote=v,{textarea:true});
-      const jump=elem('button','edit-preview-link','↑ 跳转到第 '+(i+1)+' 章查看');jump.type='button';jump.addEventListener('click',()=>document.getElementById('chapter-'+(i+1)).scrollIntoView({behavior:'smooth'}));c.append(jump);
-    });
-    const cards=addEditorGroup('04 · 第三章的三张翻转卡片','三张卡片都能单独修改正面标题和背面的心里话。');
-    site.cards.forEach((card,i)=>{
-      const pair=elem('div','edit-two-col');cards.append(pair);
-      addField(pair,'第 '+(i+1)+' 张：正面标题','card'+i+'title',card.title,v=>card.title=v);
-      addField(pair,'第 '+(i+1)+' 张：背面文字','card'+i+'text',card.text,v=>card.text=v,{textarea:true});
-    });
-    const ending=addEditorGroup('05 · 末页与落款','建议最后一页保持温柔、简短，尊重她的选择。');
-    addField(ending,'结束语','endLine',site.endLine,v=>site.endLine=v,{textarea:true});
-    addField(ending,'附言','endNote',site.endNote,v=>site.endNote=v,{textarea:true});
-    addField(ending,'底部文字','footer',site.footer,v=>site.footer=v);
-  }
-  $('reset-site').addEventListener('click',()=>{
-    if(!confirm('确定恢复所有示例内容吗？你在本机的修改将被覆盖。'))return;
-    site=JSON.parse(JSON.stringify(original));save();if(localAudioUrl){URL.revokeObjectURL(localAudioUrl);localAudioUrl=null;}audio.pause();prepareMusic();showEditorFields();render();toast('已经恢复初始示例');
-  });
-  $('export-html').addEventListener('click',()=>{
-    const clone=document.documentElement.cloneNode(true);
-    const embedded=clone.querySelector('#site-data');embedded.textContent=JSON.stringify(site,null,2).replace(/</g,'\\u003c');
-    clone.querySelector('body').classList.remove('editor-enabled','editor-open');
-    clone.querySelector('html')?.removeAttribute('style');
-    clone.querySelector('#background-audio')?.removeAttribute('src');
-    // Avoid exporting preview-only HTML: on next load, the script renders from the embedded JSON.
-    const exportHtml='<!doctype html>\n'+clone.outerHTML;
-    const blob=new Blob([exportHtml],{type:'text/html;charset=utf-8'});
-    const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='index.html';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2500);
-    toast('导出成功。上传 index.html 和音乐文件到 GitHub，网页才会更新。');
-  });
-  prepareMusic();render();if(editorEnabled)showEditorFields();
+const $=id=>document.getElementById(id);
+const original=JSON.parse($('site-data').textContent);
+let site=JSON.parse(JSON.stringify(original));
+const draftKey='our-story-draft-eight-pages';
+const editing=new URLSearchParams(location.search).has('edit')||location.hash==='#edit';
+const themes={
+ rose:{paper:'#f8f3ef',paper2:'#fffaf7',ink:'#493e42',muted:'#887479',accent:'#bd8192',accent2:'#e3b7c1',line:'#e9d9d9',glow:'rgba(209,150,165,.24)'},
+ cream:{paper:'#faf5e9',paper2:'#fffdf6',ink:'#50463d',muted:'#8a786a',accent:'#b48d65',accent2:'#e7d5ae',line:'#e8dfce',glow:'rgba(220,191,137,.22)'},
+ lilac:{paper:'#f7f3fb',paper2:'#fdfaff',ink:'#4b415a',muted:'#817390',accent:'#a581bd',accent2:'#d4bde4',line:'#e6dcf0',glow:'rgba(177,143,198,.21)'},
+ mist:{paper:'#f3f7f6',paper2:'#fafffd',ink:'#3d5250',muted:'#728e87',accent:'#73a69b',accent2:'#b7d2c9',line:'#d8e8e4',glow:'rgba(135,182,170,.2)'}
+};
+if(editing){document.body.classList.add('editor-enabled');try{const saved=JSON.parse(localStorage.getItem(draftKey)||'null');if(saved&&Array.isArray(saved.chapters)&&saved.chapters.length===8)site=saved;}catch(e){}}
+let current=0;let opening=false;let toastTimer;
+const audio=$('background-audio');const musicButton=$('music-toggle');let localMusicUrl=null;let verifiedMusic='';
+function toast(message){$('toast').textContent=message;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),4400)}
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=String(text);return e}
+function text(id,value){$(id).textContent=String(value??'')}
+function save(){if(!editing)return;try{localStorage.setItem(draftKey,JSON.stringify(site))}catch(e){}}
+function applyTheme(){const t=themes[site.theme]||themes.rose;for(const [name,value] of Object.entries(t))document.documentElement.style.setProperty('--'+name,value);document.documentElement.style.setProperty('--scale',Number(site.fontScale)||1);$('stage').classList.toggle('motion-off',!site.motion)}
+function showPage(page,focus=false){current=Math.max(0,Math.min(site.chapters.length,page));const cover=$('cover-scene');cover.classList.toggle('active',current===0);cover.setAttribute('aria-hidden',String(current!==0));for(const scene of document.querySelectorAll('.story-scene')){const active=Number(scene.dataset.page)===current;scene.classList.toggle('active',active);scene.setAttribute('aria-hidden',String(!active));if(active)scene.scrollTop=0;}
+const nav=$('navigation');nav.classList.toggle('show',current!==0);$('nav-back').textContent=current===1?'返回封面':'上一页';$('nav-next').textContent=current===site.chapters.length?'重新读一遍　↺':'下一页　›';if(focus&&current>0){document.querySelector('.story-scene.active .story-title')?.focus({preventScroll:true})} }
+function render(){applyTheme();text('hero-eyebrow',site.eyebrow);text('hero-recipient',site.recipient);text('hero-title',site.heroTitle);text('hero-subtitle',site.heroSubtitle);text('hero-footer',site.coverFooter);document.title=site.heroTitle+' · 有些话想说给你听';
+ const story=$('story');story.replaceChildren();site.chapters.forEach((ch,index)=>{const scene=el('article','scene story-scene');scene.dataset.page=String(index+1);scene.id='story-page-'+index;scene.setAttribute('aria-hidden','true');const shell=el('div','scene-center');const content=el('div','page-content');content.append(el('p','story-title-note',ch.kicker));const h=el('h2','story-title',ch.title);h.tabIndex=-1;content.append(h,el('div','divider'));const body=el('div','story-body');String(ch.body||'').split(/\n\s*\n/).filter(Boolean).forEach(p=>body.append(el('p','',p.trim())));content.append(body);
+ if(index===3){content.append(el('p','cards-title','还有几句话，想悄悄告诉你。轻点卡片就能翻开。'));const grid=el('div','flip-grid');site.cards.forEach(card=>{const btn=el('button','flip-card');btn.type='button';btn.setAttribute('aria-pressed','false');btn.setAttribute('aria-label','翻开'+card.title);const inner=el('span','flip-inner'),front=el('span','flip-face front'),back=el('span','flip-face back',card.text);front.append(el('span','','♡'),el('strong','',card.title),el('small','','轻点翻开'));inner.append(front,back);btn.append(inner);btn.addEventListener('click',()=>{const flipped=btn.classList.toggle('flipped');btn.setAttribute('aria-pressed',String(flipped));btn.setAttribute('aria-label',(flipped?'收起':'翻开')+card.title)});grid.append(btn)});content.append(grid)}
+ if(ch.quote&&ch.quote.trim())content.append(el('blockquote','story-quote',ch.quote));
+ if(index===site.chapters.length-1){const flower=document.createElementNS('http://www.w3.org/2000/svg','svg');flower.setAttribute('viewBox','0 0 64 64');flower.setAttribute('fill','none');flower.setAttribute('stroke','currentColor');flower.setAttribute('stroke-width','1.5');flower.setAttribute('stroke-linecap','round');flower.setAttribute('class','end-flower');flower.innerHTML='<path d="M32 53V24M32 38C21 37 16 30 15 23c9-1 15 5 17 15Zm0-7c1-12 7-17 17-19 0 10-7 17-17 19Z"/><path d="M32 24c-6-8-6-15 0-20 6 5 6 12 0 20Zm0 0c8-6 16-5 20-1-5 6-13 6-20 1Zm0 0c-8-6-16-5-20-1 5 6 13 6 20 1Z"/>';content.append(flower,el('p','end-message',site.endLine),el('p','end-note',site.endNote),el('p','end-footer',site.footer))}
+ shell.append(content);scene.append(shell);story.append(scene)});showPage(current)}
+$('open-letter').addEventListener('click',()=>{if(opening)return;opening=true;$('open-letter').classList.add('opened');setTimeout(()=>{showPage(1,true);opening=false;$('open-letter').classList.remove('opened')},site.motion?680:50)});
+$('nav-back').addEventListener('click',()=>showPage(current-1,true));$('nav-next').addEventListener('click',()=>showPage(current===site.chapters.length?0:current+1,true));
+function updateMusicButton(playing){musicButton.classList.toggle('playing',playing);musicButton.setAttribute('aria-pressed',String(playing));musicButton.setAttribute('aria-label',playing?'暂停背景音乐':'播放背景音乐');text('music-label',playing?'暂停音乐':'播放音乐')}
+function candidates(){const arr=[site.music?.src,'music.mp3','艾索 - 嘘_H.mp3','our_story_music.mp3'];return [...new Set(arr.map(x=>String(x||'').trim()).filter(Boolean))]}
+function setSource(path){audio.pause();audio.src=path;audio.load()}
+function prepareMusic(){audio.volume=Math.min(1,Math.max(0,Number(site.music?.volume??.35)));if(!localMusicUrl){setSource(site.music?.src||'music.mp3');verifiedMusic=''}}
+async function playWithFallback(){if(localMusicUrl){await audio.play();return}
+ const paths=verifiedMusic?[verifiedMusic]:candidates();let lastError;
+ for(const path of paths){try{if(audio.getAttribute('src')!==path)setSource(path);await audio.play();verifiedMusic=path;const status=$('music-status');if(status)status.textContent='正在播放：'+path;return}catch(e){lastError=e;if(e.name==='NotAllowedError')break}}
+ throw lastError||new Error('无法打开音乐文件')}
+musicButton.addEventListener('click',async()=>{if(!audio.paused){audio.pause();return}try{await playWithFallback()}catch(e){updateMusicButton(false);const status=$('music-status');const details='当前查找：'+candidates().join('、');if(status)status.textContent='未能播放。'+details+'。请检查仓库中的实际文件名，或使用下方文件选择试听。';toast(e.name==='NotAllowedError'?'浏览器阻止了播放，请再次点击音乐按钮':'找不到可播放的音乐：请在调试区填写 GitHub 中音乐文件的准确名称')}});
+audio.addEventListener('play',()=>updateMusicButton(true));audio.addEventListener('pause',()=>updateMusicButton(false));audio.addEventListener('ended',()=>updateMusicButton(false));audio.addEventListener('error',()=>updateMusicButton(false));
+function addField(mount,label,value,onChange,opts={}){const div=el('div','edit-field'),lab=el('label','',label),input=opts.textarea?el('textarea'):opts.select?el('select'):el('input');const id='edit-field-'+Math.random().toString(36).slice(2);input.id=id;lab.htmlFor=id;if(opts.select)opts.select.forEach(([v,name])=>{const op=el('option','',name);op.value=v;input.append(op)});else if(!opts.textarea){input.type=opts.type||'text';if(opts.type==='range'){input.min=0;input.max=1;input.step=.05}}
+ input.value=String(value??'');input.addEventListener(opts.select?'change':'input',()=>{onChange(input.value);save();render()});div.append(lab,input);mount.append(div);return input}
+function group(title,desc){const node=el('section','edit-group');node.append(el('h3','',title));if(desc)node.append(el('p','edit-note',desc));$('editor-fields').append(node);return node}
+function renderEditor(){if(!editing)return;const host=$('editor-fields');host.replaceChildren();const base=group('封面与整体样式','所有文案都可以调整，编辑时会即时更新，翻页位置不会改变。');const pair=el('div','edit-grid');base.append(pair);addField(pair,'她的称呼',site.recipient,v=>site.recipient=v);addField(pair,'封面上方的小字',site.eyebrow,v=>site.eyebrow=v);addField(base,'封面主标题',site.heroTitle,v=>site.heroTitle=v);addField(base,'封面副标题',site.heroSubtitle,v=>site.heroSubtitle=v,{textarea:true});addField(base,'封面底部的一句话',site.coverFooter,v=>site.coverFooter=v,{textarea:true});const styles=el('div','edit-grid');base.append(styles);addField(styles,'页面配色',site.theme,v=>site.theme=v,{select:[['rose','奶油樱花粉'],['cream','暖奶油色'],['lilac','浅紫色'],['mist','薄荷雾绿']]});addField(styles,'文字大小',site.fontScale,v=>site.fontScale=Number(v),{select:[['0.95','稍小'],['1','标准（已放大）'],['1.1','更大'],['1.2','特大']]});addField(base,'柔和动画',String(site.motion),v=>site.motion=v==='true',{select:[['true','开启'],['false','关闭']]});
+ const music=group('背景音乐','选择的本地文件仅用于当前浏览器试听；正式播放仍需要 GitHub 仓库中的音乐文件。');const file=el('input','file-pick');file.type='file';file.accept='audio/*,.mp3,.m4a,.wav';file.setAttribute('aria-label','选择本地音乐试听');music.append(file);const status=el('p','music-status','当前优先查找：'+(site.music?.src||'music.mp3'));status.id='music-status';music.append(status);
+ file.addEventListener('change',()=>{const musicFile=file.files?.[0];if(!musicFile)return;audio.pause();if(localMusicUrl)URL.revokeObjectURL(localMusicUrl);localMusicUrl=URL.createObjectURL(musicFile);audio.src=localMusicUrl;audio.load();site.music.src=musicFile.name;const field=$('music-path');if(field)field.value=musicFile.name;status.textContent='本地试听文件：'+musicFile.name+'。部署时请将相同文件名的音乐上传至仓库。';save();toast('音乐已选好，点击右上角播放按钮试听')});
+ const path=addField(music,'GitHub 仓库中的音乐文件名',site.music?.src||'music.mp3',v=>{site.music.src=v;verifiedMusic='';if(localMusicUrl){URL.revokeObjectURL(localMusicUrl);localMusicUrl=null}prepareMusic();status.textContent='当前优先查找：'+v});path.id='music-path';
+ addField(music,'音乐音量',site.music?.volume??.35,v=>{site.music.volume=Number(v);audio.volume=Number(v)},{type:'range'});
+ const section=group('逐页修改想说的话','下方每一项都对应一页，点击标题即可展开；“预览这一页”可以回到上方查看。');site.chapters.forEach((ch,index)=>{const d=el('details','edit-details');if(index===current-1)d.open=true;const summary=el('summary','',ch.title),body=el('div','edit-details-body');d.append(summary,body);addField(body,'页首提示',ch.kicker,v=>ch.kicker=v);addField(body,'本页标题',ch.title,v=>{ch.title=v;summary.textContent=v});addField(body,'本页正文（空行表示分段）',ch.body,v=>ch.body=v,{textarea:true});addField(body,'本页末尾短句',ch.quote,v=>ch.quote=v,{textarea:true});const preview=el('button','edit-preview','预览这一页 ↑');preview.type='button';preview.addEventListener('click',()=>{showPage(index+1,true);window.scrollTo({top:0,behavior:'smooth'})});body.append(preview);section.append(d)});
+ const cards=group('三张可以翻开的小卡片','每张卡片的标题和背面心里话都可以分别修改。');site.cards.forEach((card,index)=>{const p=el('div','edit-grid');cards.append(p);addField(p,'卡片标题：'+card.title,card.title,v=>card.title=v);addField(p,'卡片背面的文字',card.text,v=>card.text=v,{textarea:true})});
+ const tail=group('最后一页的落款','最后一页的花朵下方会显示以下文字。');addField(tail,'最后的心里话',site.endLine,v=>site.endLine=v,{textarea:true});addField(tail,'附言',site.endNote,v=>site.endNote=v,{textarea:true});addField(tail,'最下方的文字',site.footer,v=>site.footer=v);
+}
+$('export-html').addEventListener('click',()=>{const clone=document.documentElement.cloneNode(true);clone.querySelector('#site-data').textContent=JSON.stringify(site,null,2).replace(/</g,'\\u003c');clone.querySelector('body').classList.remove('editor-enabled');clone.querySelector('#story')?.replaceChildren();clone.querySelector('#editor-fields')?.replaceChildren();clone.querySelector('#music-status')?.remove();clone.querySelector('#background-audio')?.removeAttribute('src');clone.querySelector('#cover-scene')?.classList.add('active');clone.querySelector('#navigation')?.classList.remove('show');const contents='<!doctype html>\n'+clone.outerHTML;const url=URL.createObjectURL(new Blob([contents],{type:'text/html;charset=utf-8'}));const a=el('a');a.href=url;a.download='index.html';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2500);toast('已导出 index.html。上传到 GitHub 仓库替换同名文件即可更新网页')});
+$('reset-site').addEventListener('click',()=>{if(!confirm('确定恢复当前网页原始内容吗？本浏览器内的文字修改将被覆盖。'))return;site=JSON.parse(JSON.stringify(original));save();if(localMusicUrl){URL.revokeObjectURL(localMusicUrl);localMusicUrl=null}prepareMusic();current=0;render();renderEditor();toast('已恢复原始内容')});
+$('preview-cover').addEventListener('click',()=>{showPage(0);window.scrollTo({top:0,behavior:'smooth'})});
+prepareMusic();render();if(editing)renderEditor();
 })();
 </script>
 </body>
