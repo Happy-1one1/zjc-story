@@ -77,7 +77,7 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-vis
     {"kicker":"关于那次不愉快","title":"有些事情，我确实没有做好","body":"这次让你不开心的事情，我没有处理好。对不起。\n\n我知道，不能因为自己没有恶意，就忽略你的真实感受。比起着急解释，我更应该认真听懂你为什么难过、你在意的究竟是什么。\n\n我不想用一句“我错了”就轻轻带过。需要改变的地方，应该体现在我今后的言语和行动里。","quote":"我会把这次不愉快认真放在心上，也认真面对自己的问题。"},
     {"kicker":"关于理解","title":"如果可以，我们慢一点也没关系","body":"我不希望你因为我的期待，就勉强自己做出决定。\n\n如果曾经的相处让你感觉轻松，而现在的一些事情让你开始犹豫，那我愿意正视这些变化，也愿意把节奏慢下来。\n\n我们不需要立刻确定未来会怎样。对我来说，比急着得到一个答案更重要的，是彼此能不能真诚、舒服地相处。","quote":"慢一点没关系，重要的是我们都愿意。"},
     {"kicker":"关于以后","title":"我想象中的我们","body":"我仍然期待和你继续认识彼此。不是假装什么都没发生过，而是在更了解对方的基础上，重新学着好好相处。\n\n我希望未来的相处里，开心能够自然分享，难过能够坦诚说出口，遇到分歧也能坐下来好好沟通。\n\n我想成为可以和你并肩相处的人，而不是一个怕影响对方的人。","quote":"好的关系，应该让两个人都自在。"},
-    {"kicker":"关于这封信","title":"本来，我是想用这样的方式向你表白","body":"其实做这个网页，本来是想换一种认真一点的方式，把喜欢告诉你。\n\n我原本想象的是，在一个刚刚好的时刻，把这些心里话慢慢说给你听，然后认真地问你，要不要和我一起往前走一走。\n\n只是我没想到，还没等我把这份期待好好说出口，我们之间就先有了这次不愉快。也正因为这样，这个网页没有变成我原来设想里的告白，而是变成了我现在想认真交给你的一份心意。","quote":"原本准备说的喜欢，现在还是想认真告诉你。"},
+    {"kicker":"关于这封信","title":"本来，我是想用这样的方式向你表白","body":"其实做这个网页，本来是想换一种认真一点的方式，把喜欢告诉你。\n\n我原本想象的是，在一个刚刚好的时刻，把这些心里话慢慢说给你听，然后认真地问你，要不要和我一起往前走一走。\n\n只是有些话在心里放了太久，等到终于想认真说出口时，我才发现，比起设想一个完美的时刻，更重要的是把此刻的心意坦诚地告诉你。也正因为这样，这个网页没有变成我原来设想里的表白，而是变成了我现在想认真交给你的一份心意。","quote":"原本准备说的喜欢，现在还是想认真告诉你。"},
     {"kicker":"最后想说","title":"如果故事还有下一页","body":"谢谢你曾经认真地靠近过我，也谢谢你愿意听我说完这些话。\n\n你对我而言是特别的，所以我才想认真争取一次。我确实希望，我们还有机会好好相处，看看彼此之间是否还有继续走下去的可能。\n\n但我知道，喜欢不能代替你的选择。如果你需要时间，我愿意尊重；如果你的决定已经很明确，我也会尊重。","quote":"如果还有下一页，我想更认真地写好它。"}
   ],
   "endLine":"无论怎样，谢谢你愿意听我说这些。",
@@ -100,14 +100,14 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-vis
   <nav class="navigation" id="navigation" aria-label="翻页按钮"><button class="nav-btn secondary" type="button" id="nav-back">上一页</button><button class="nav-btn primary" type="button" id="nav-next">下一页　›</button></nav>
   <button class="music-control" type="button" id="music-toggle" aria-label="关闭背景音乐" aria-pressed="true"><span class="music-note" aria-hidden="true">♫</span><span id="music-label">关闭音乐</span></button>
 </div>
-<audio id="background-audio" loop preload="none"></audio>
+<audio id="background-audio" autoplay loop preload="auto" playsinline></audio>
 <section class="editor-panel" id="editor-panel" aria-label="网页调试区域"><div class="editor-inner">
   <h2 class="editor-title">把想说的话，调整到刚刚好</h2>
   <p class="editor-intro">这里可以单独修改每一页的内容、三张小卡片、背景颜色和音乐。调试工具只在你使用带有 ?edit=1 的网址时出现，位于整页最下方。</p>
   <div class="editor-warning">调试修改会暂存在当前浏览器里，不会直接同步到 GitHub。调整完成后，请点击下方的“导出新版网页”，再上传替换仓库中的 <strong>index.html</strong>。正式分享的链接不要加 ?edit=1。</div>
   <div id="editor-fields"></div>
   <div class="edit-buttons"><button class="edit-btn primary" type="button" id="export-html">导出新版 index.html</button><button class="edit-btn" type="button" id="reset-site">恢复当前网页原始内容</button><button class="edit-btn" type="button" id="preview-cover">回到封面预览</button></div>
-  <p class="editor-help">网页会默认尝试播放背景音乐；如果浏览器阻止自动播放，可以点击右上角“继续播放”。音乐文件需要和 index.html 一起放在 GitHub 仓库根目录。网页会尝试“music.mp3”和之前提供的音乐原名；你也可以在下方填写精确的音乐文件名。</p>
+  <p class="editor-help">背景音乐默认开启；如果浏览器限制自动播放，轻点信封或页面即可开始播放，无需单独打开音乐。音乐文件需要和 index.html 一起放在 GitHub 仓库根目录。网页会尝试“music.mp3”和之前提供的音乐原名；你也可以在下方填写精确的音乐文件名。</p>
 </div></section>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
@@ -125,7 +125,7 @@ const themes={
 };
 if(editing){document.body.classList.add('editor-enabled');try{const saved=JSON.parse(localStorage.getItem(draftKey)||'null');if(saved&&Array.isArray(saved.chapters)&&saved.chapters.length===9)site=saved;}catch(e){}}
 let current=0;let opening=false;let toastTimer;
-const audio=$('background-audio');const musicButton=$('music-toggle');let localMusicUrl=null;let verifiedMusic='';let musicHideTimer=0;let musicInteracted=false;
+const audio=$('background-audio');const musicButton=$('music-toggle');let localMusicUrl=null;let verifiedMusic='';let musicHideTimer=0;let musicEnabled=true;
 function toast(message){$('toast').textContent=message;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),4400)}
 function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=String(text);return e}
 function text(id,value){$(id).textContent=String(value??'')}
@@ -142,17 +142,21 @@ function render(){applyTheme();text('hero-eyebrow',site.eyebrow);text('hero-reci
 $('open-letter').addEventListener('click',()=>{if(opening)return;opening=true;$('open-letter').classList.add('opened');setTimeout(()=>{showPage(1,true);opening=false;$('open-letter').classList.remove('opened')},site.motion?680:50)});
 $('nav-back').addEventListener('click',()=>showPage(current-1,true));$('nav-next').addEventListener('click',()=>showPage(current===site.chapters.length?0:current+1,true));
 function showMusicButton(delay=4800){musicButton.classList.remove('hidden');clearTimeout(musicHideTimer);musicHideTimer=setTimeout(()=>musicButton.classList.add('hidden'),delay)}
-function updateMusicButton(playing){musicButton.classList.toggle('playing',playing);musicButton.setAttribute('aria-pressed',String(playing));musicButton.setAttribute('aria-label',playing?'关闭背景音乐':'继续播放背景音乐');text('music-label',playing?'关闭音乐':'继续播放');showMusicButton()}
+function updateMusicButton(playing){musicButton.classList.toggle('playing',playing);musicButton.setAttribute('aria-pressed',String(musicEnabled));musicButton.setAttribute('aria-label',musicEnabled?'关闭背景音乐':'继续播放背景音乐');text('music-label',musicEnabled?'关闭音乐':'继续播放');showMusicButton()}
 function candidates(){const arr=[site.music?.src,'music.mp3','艾索 - 嘘_H.mp3','our_story_music.mp3'];return [...new Set(arr.map(x=>String(x||'').trim()).filter(Boolean))]}
 function setSource(path){audio.pause();audio.src=path;audio.load()}
-function prepareMusic(){audio.autoplay=true;audio.volume=Math.min(1,Math.max(0,Number(site.music?.volume??.35)));if(!localMusicUrl){setSource(site.music?.src||'music.mp3');verifiedMusic=''}}
-async function playWithFallback(){if(localMusicUrl){await audio.play();return}
+function prepareMusic(){audio.autoplay=musicEnabled;audio.volume=Math.min(1,Math.max(0,Number(site.music?.volume??.35)));if(!localMusicUrl){setSource(site.music?.src||'music.mp3');verifiedMusic=''}updateMusicButton(!audio.paused)}
+async function playWithFallback(){if(!musicEnabled)return;if(localMusicUrl){await audio.play();if(!musicEnabled)audio.pause();return}
  const paths=verifiedMusic?[verifiedMusic]:candidates();let lastError;
- for(const path of paths){try{if(audio.getAttribute('src')!==path)setSource(path);await audio.play();verifiedMusic=path;const status=$('music-status');if(status)status.textContent='正在播放：'+path;return}catch(e){lastError=e;if(e.name==='NotAllowedError')break}}
+ for(const path of paths){if(!musicEnabled)return;try{if(audio.getAttribute('src')!==path)setSource(path);await audio.play();if(!musicEnabled){audio.pause();return}verifiedMusic=path;const status=$('music-status');if(status)status.textContent='正在播放：'+path;return}catch(e){if(!musicEnabled||e.name==='AbortError')return;lastError=e;if(e.name==='NotAllowedError')break}}
  throw lastError||new Error('无法打开音乐文件')}
-async function attemptAutoplay(){try{await playWithFallback();musicInteracted=true}catch(e){updateMusicButton(false);const status=$('music-status');const details='当前查找：'+candidates().join('、');if(status)status.textContent=e.name==='NotAllowedError'?'浏览器暂时阻止了自动播放。你可以点右上角“继续播放”。':'未能自动播放。'+details+'。请检查仓库中的实际文件名，或使用下方文件选择试听。';showMusicButton(7000)}}
-musicButton.addEventListener('click',async()=>{musicInteracted=true;if(!audio.paused){audio.pause();showMusicButton(7000);return}try{await playWithFallback();showMusicButton(7000)}catch(e){updateMusicButton(false);const status=$('music-status');const details='当前查找：'+candidates().join('、');if(status)status.textContent='未能播放。'+details+'。请检查仓库中的实际文件名，或使用下方文件选择试听。';toast(e.name==='NotAllowedError'?'浏览器阻止了播放，请再次点击“继续播放”':'找不到可播放的音乐：请在调试区填写 GitHub 中音乐文件的准确名称')}});
-audio.addEventListener('play',()=>updateMusicButton(true));audio.addEventListener('pause',()=>updateMusicButton(false));audio.addEventListener('ended',()=>updateMusicButton(false));audio.addEventListener('error',()=>updateMusicButton(false));['pointerdown','pointermove','keydown'].forEach(evt=>document.addEventListener(evt,()=>showMusicButton(),{passive:true}));
+async function attemptAutoplay(notify=false){if(!musicEnabled)return;try{await playWithFallback()}catch(e){if(!musicEnabled||e.name==='AbortError')return;const blocked=e.name==='NotAllowedError';if(!blocked){musicEnabled=false;audio.autoplay=false}updateMusicButton(false);const status=$('music-status');const details='当前查找：'+candidates().join('、');if(status)status.textContent=blocked?'音乐默认开启，浏览器暂时限制自动播放；轻点信封或页面即可开始。':'未能播放。'+details+'。请检查仓库中的实际文件名，或使用下方文件选择试听。';if(notify)toast(blocked?'音乐已开启，轻点信封或页面即可开始播放':'找不到可播放的音乐：请在调试区填写 GitHub 中音乐文件的准确名称');showMusicButton(7000)}}
+musicButton.addEventListener('click',async()=>{musicEnabled=!musicEnabled;audio.autoplay=musicEnabled;if(!musicEnabled){audio.pause();updateMusicButton(false);showMusicButton(7000);return}updateMusicButton(!audio.paused);await attemptAutoplay(true);showMusicButton(7000)});
+audio.addEventListener('play',()=>{if(!musicEnabled){audio.pause();return}updateMusicButton(true)});audio.addEventListener('pause',()=>updateMusicButton(false));audio.addEventListener('ended',()=>updateMusicButton(false));audio.addEventListener('error',()=>updateMusicButton(false));['pointerdown','pointermove','keydown'].forEach(evt=>document.addEventListener(evt,()=>showMusicButton(),{passive:true}));
+// Keep music enabled when autoplay is blocked, then retry within a user gesture.
+// An explicit tap on the music switch always controls the preference itself.
+function resumeMusicOnInteraction(event){if(event.target?.closest?.('#music-toggle'))return;if(musicEnabled&&audio.paused)void attemptAutoplay()}
+['pointerdown','touchend','click','keydown'].forEach(evt=>document.addEventListener(evt,resumeMusicOnInteraction,{capture:true,passive:true}));
 function addField(mount,label,value,onChange,opts={}){const div=el('div','edit-field'),lab=el('label','',label),input=opts.textarea?el('textarea'):opts.select?el('select'):el('input');const id='edit-field-'+Math.random().toString(36).slice(2);input.id=id;lab.htmlFor=id;if(opts.select)opts.select.forEach(([v,name])=>{const op=el('option','',name);op.value=v;input.append(op)});else if(!opts.textarea){input.type=opts.type||'text';if(opts.type==='range'){input.min=0;input.max=1;input.step=.05}}
  input.value=String(value??'');input.addEventListener(opts.select?'change':'input',()=>{onChange(input.value);save();render()});div.append(lab,input);mount.append(div);return input}
 function group(title,desc){const node=el('section','edit-group');node.append(el('h3','',title));if(desc)node.append(el('p','edit-note',desc));$('editor-fields').append(node);return node}
